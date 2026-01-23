@@ -1,8 +1,9 @@
+import { parseTemplate, TmplAstSwitchBlock } from '@angular/compiler';
 import { ScriptKind, tsquery } from '@phenomnomnominal/tsquery';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { LanguageVariant } from 'typescript';
 
-import { getAST, getNamedImport, getNamedImportAlias } from '../../src/utils/ast-helpers';
+import { getAST, getNamedImport, getNamedImportAlias, getNodesFromSwitchBlockTmpl } from '../../src/utils/ast-helpers.js';
 
 describe('getAST()', () => {
 	const tsqueryAstSpy = vi.spyOn(tsquery, 'ast');
@@ -165,5 +166,60 @@ describe('getNamedImportAlias()', () => {
 			expect(getNamedImportAlias(node, 'CoreBase', new RegExp('base'))).to.equal('CoreBase');
 			expect(getNamedImportAlias(node, 'Base', new RegExp('base'))).to.equal('CoreBase');
 		});
+	});
+});
+
+describe('getNodesFromSwitchBlockTmpl()', () => {
+	it('should extract nodes from a @switch', () => {
+		const nodes = parseTemplate(`
+			@switch (condition) {
+				@case (caseA) {
+				  <div>switch.caseA</div>
+				}
+				@case (caseB) {
+				  <div>switch.caseB</div>
+				}
+				@default {
+				  <div>switch.default</div>
+				}
+			  }
+		`, '.').nodes;
+
+		expect(nodes.length).toBe(1);
+		expect(nodes.at(0)).toBeInstanceOf(TmplAstSwitchBlock);
+
+		const childNodes = getNodesFromSwitchBlockTmpl(nodes.at(0) as TmplAstSwitchBlock);
+		expect(childNodes.length).toBe(3);
+		expect(childNodes.at(0).children.at(0).value).toBe('switch.caseA');
+		expect(childNodes.at(1).children.at(0).value).toBe('switch.caseB');
+		expect(childNodes.at(2).children.at(0).value).toBe('switch.default');
+	});
+
+	it('should extract nodes from a @switch with `cases` property', () => {
+		const nodes = parseTemplate(`
+			@switch (condition) {
+				@case (caseA) {
+				  <div>switch.caseA</div>
+				}
+				@case (caseB) {
+				  <div>switch.caseB</div>
+				}
+				@default {
+				  <div>switch.default</div>
+				}
+			  }
+		`, '.').nodes;
+		const switchBlockNode = nodes.at(0) as TmplAstSwitchBlock;
+
+		// Create a mock node with the 'cases' property since we cannot install an older version of angular compiler
+		// only for the test.
+		Reflect.defineProperty(switchBlockNode, 'cases', { value: switchBlockNode.groups });
+		Reflect.deleteProperty(switchBlockNode, 'groups');
+
+		const childNodes = getNodesFromSwitchBlockTmpl(switchBlockNode);
+		expect(childNodes.length).toBe(3);
+		expect(childNodes.at(0).children.at(0).value).toBe('switch.caseA');
+		expect(childNodes.at(1).children.at(0).value).toBe('switch.caseB');
+		expect(childNodes.at(2).children.at(0).value).toBe('switch.default');
 	});
 });

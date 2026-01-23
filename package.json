@@ -22,7 +22,7 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "@angular/compiler": "^21.0.3",
+    "@angular/compiler": "^21.1.1",
     "@types/braces": "^3.0.5",
     "@types/gettext-parser": "^8.0.0",
     "@types/node": "^20.19.25",

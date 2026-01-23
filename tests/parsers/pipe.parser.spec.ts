@@ -388,6 +388,23 @@ describe('PipeParser', () => {
 			expect(keys).to.deep.equal(['switch.caseA', 'switch.caseB', 'switch.default']);
 		});
 
+		it('should extract keys from elements inside an @switch/@case block with multiple matching cases' ,() => {
+			const contents = `
+			@switch (condition) {
+				@case (caseA)
+				@case (caseB) {
+				  {{ 'switch.caseA' | translate }}
+				  {{ 'switch.caseB' | translate }}
+				}
+				@default {
+				  {{ 'switch.default' | translate }}
+				}
+			  }`;
+
+			const keys = parser.extract(contents, templateFilename).keys();
+			expect(keys).to.deep.equal(['switch.caseA', 'switch.caseB', 'switch.default']);
+		});
+
 		it('should extract keys from elements inside an @deferred/@error/@loading/@placeholder block', () => {
 			const contents = `
 				@defer (on viewport) {

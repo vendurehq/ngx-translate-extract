@@ -21,6 +21,7 @@ import {
 } from '@angular/compiler';
 
 import { ParserInterface } from './parser.interface.js';
+import { getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
 import { TranslationCollection } from '../utils/translation.collection.js';
 import { isPathAngularComponent, extractComponentInlineTemplate } from '../utils/utils.js';
 
@@ -72,7 +73,8 @@ function traverseAstNode<RESULT, NODE extends TmplAstNode | TmplAstElement>(
 
 	// contents of @case blocks (ignoring the @switch(...) statement though)
 	if (node instanceof TmplAstSwitchBlock) {
-		children.push(...node.cases.flatMap((inner) => inner.children));
+		const blockChildren = getNodesFromSwitchBlockTmpl(node);
+		children.push(...blockChildren);
 	}
 
 	return traverseAstNodes(children, visitor, accumulator);

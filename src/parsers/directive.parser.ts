@@ -24,6 +24,7 @@ import {
 } from '@angular/compiler';
 
 import { ParserInterface } from './parser.interface.js';
+import { getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
 import { TranslationCollection } from '../utils/translation.collection.js';
 import { extractComponentInlineTemplate, isPathAngularComponent } from '../utils/utils.js';
 
@@ -59,7 +60,7 @@ export class DirectiveParser implements ParserInterface {
 			const boundAttribute = this.getBoundAttribute(element, TRANSLATE_ATTR_NAMES);
 			if (boundAttribute?.value) {
 				this.getLiteralPrimitives(boundAttribute.value).forEach((literalPrimitive) => {
-					collection = collection.add(literalPrimitive.value, '', filePath);
+					collection = collection.add(literalPrimitive.value.toString(), '', filePath);
 				});
 				return;
 			}
@@ -108,7 +109,7 @@ export class DirectiveParser implements ParserInterface {
 		}
 
 		if (blockNode instanceof TmplAstSwitchBlock) {
-			blockChildren = blockNode.cases.map((branch) => branch.children).flat();
+			blockChildren = getNodesFromSwitchBlockTmpl(blockNode);
 		}
 
 		if (blockNode instanceof TmplAstForLoopBlock) {
