@@ -127,10 +127,6 @@
       "env": {
         "vitest": true
       },
-		"categories": {
-			"style": "off",
-			"pedantic": "off"
-		},
       "rules": {
         "vitest/no-disabled-tests": "error",
         "no-unused-vars": "off"
