@@ -1,5 +1,9 @@
 # Changelog
 
+## v10.1.3 (2026-01-23)
+
+- Fix parsing of `@switch` blocks in pipe and directive parser for Angular v21.1 ([#126](https://github.com/vendurehq/ngx-translate-extract/issues/126))
+
 ## v10.1.2 (2025-12-04)
 
 - Fix directive parser incorrectly extracting strings from attribute bindings (e.g. `[attr.translate]`), as these are not processed by `ngx-translate` ([#121](https://github.com/vendure-ecommerce/ngx-translate-extract/issues/121))
