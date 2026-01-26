@@ -1,4 +1,4 @@
-name: Publish Package to npmjs
+name: Publish to NPM
 on:
   workflow_dispatch:
     inputs:
@@ -30,7 +30,7 @@ jobs:
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
       # Install  dependencies without modifying package-lock.json file
       - name: Install deps
@@ -43,14 +43,12 @@ jobs:
         if: ${{ (inputs.release_type == 'release') || (github.event.head_commit.message && startsWith(github.event.head_commit.message, 'release:')) }}
         run: npm publish ./dist
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Publish Next
         if: ${{ (inputs.release_type == 'prerelease') || (github.event.head_commit.message && startsWith(github.event.head_commit.message, 'prerelease:')) }}
         run: npm publish ./dist --tag next
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Tag release commit
