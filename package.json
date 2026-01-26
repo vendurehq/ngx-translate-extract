@@ -41,7 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/vendure-ecommerce/ngx-translate-extract.git"
+    "url": "git+ssh://git@github.com/vendurehq/ngx-translate-extract.git"
   },
   "keywords": [
     "angular",
