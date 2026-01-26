@@ -1,6 +1,6 @@
 # Changelog
 
-## v10.1.3 (2026-01-23)
+## v10.1.3 (2026-01-26)
 
 - Fix parsing of `@switch` blocks in pipe and directive parser for Angular v21.1 ([#126](https://github.com/vendurehq/ngx-translate-extract/issues/126))
 
