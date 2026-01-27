@@ -55,9 +55,9 @@
     "gettext"
   ],
   "bugs": {
-    "url": "https://github.com/vendure-ecommerce/ngx-translate-extract/issues"
+    "url": "https://github.com/vendurehq/ngx-translate-extract/issues"
   },
-  "homepage": "https://github.com/vendure-ecommerce/ngx-translate-extract",
+  "homepage": "https://github.com/vendurehq/ngx-translate-extract",
   "engines": {
     "node": ">=20.19.0",
     "npm": ">=10"
