@@ -132,6 +132,11 @@ export class PipeParser implements ParserInterface {
 			});
 		}
 
+		if(node instanceof TmplAstForLoopBlock) {
+			// @for (key of ["identifier" | translate]) {}
+			ret.push(...this.getTranslatablesFromAst(node.expression.ast));
+		}
+
 		return ret;
 	}
 

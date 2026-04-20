@@ -341,6 +341,20 @@ describe('PipeParser', () => {
 		expect(keys).toEqual([]);
 	});
 
+	it('should extract keys from a @let expression', () => {
+		const contents = `
+				@let singleKey = "single.key" | translate;
+				@let listKeys = ["array.a" | translate, "array.b" | translate];
+				@let nestedTAbleKeys = [
+				  ["nested.first" | translate],
+				  ["nested.second" | translate],
+				];
+			`;
+
+		const keys = parser.extract(contents, templateFilename)?.keys();
+		expect(keys).to.deep.equal(['single.key', 'array.a', 'array.b', 'nested.first', 'nested.second']);
+	});
+
 	describe('Built-in control flow', () => {
 		it('should extract keys from elements inside an @if/@else block', () => {
 			const contents = `
@@ -368,6 +382,28 @@ describe('PipeParser', () => {
 
 			const keys = parser.extract(contents, templateFilename).keys();
 			expect(keys).to.deep.equal(['for.block', 'for.empty.block']);
+		});
+
+		it('should extract keys from a @for loop expression', () => {
+			const contents = `
+				@for (key of ["list-item.one" | translate, "list-item.two" | translate]; track key) {
+					<span>{{ key }}</span>
+				}
+
+				@for (key of [
+				  ["nested.first" | translate],
+				  ["nested.second" | translate],
+				]; track key[0]) {
+					<span>{{ key[0] }}</span>
+				}
+
+				@for (key of ["no-translate"]; track key) {
+				  	<span>{{ key }}</span>
+				}
+			`;
+
+			const keys = parser.extract(contents, templateFilename)?.keys();
+			expect(keys).to.deep.equal(['list-item.one', 'list-item.two', 'nested.first', 'nested.second']);
 		});
 
 		it('should extract keys from elements inside an @switch/@case block', () => {
