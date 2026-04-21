@@ -43,7 +43,7 @@ const cli = await y
 	.option('input', {
 		alias: 'i',
 		describe: 'Paths you would like to extract strings from. You can use path expansion, glob patterns and multiple paths',
-		default: [process.env.PWD],
+		default: [process.cwd()],
 		type: 'array',
 		normalize: true,
 		demandOption: true
