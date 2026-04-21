@@ -6,7 +6,9 @@ import { TranslationCollection } from '../../src/utils/translation.collection.js
 
 describe('SortByKeyPostProcessor - should throw error if sort sensitivity is not known', () => {
 	it('should throw error', () => {
-		expect(() => new SortByKeyPostProcessor('invalidSortSensitivityOption')).throw('Unknown sortSensitivity: invalidSortSensitivityOption');
+		expect(() => new SortByKeyPostProcessor('invalidSortSensitivityOption')).throw(
+			'Unknown sortSensitivity: invalidSortSensitivityOption',
+		);
 	});
 });
 
@@ -22,7 +24,7 @@ describe('SortByKeyPostProcessor - undefined sort sensitivity should sort as var
 			z: { value: 'last value', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			'9': { value: 'a numeric key', sourceFiles: [] },
-			b: { value: 'another value', sourceFiles: [] }
+			b: { value: 'another value', sourceFiles: [] },
 		});
 		const extracted = new TranslationCollection();
 		const existing = new TranslationCollection();
@@ -32,7 +34,7 @@ describe('SortByKeyPostProcessor - undefined sort sensitivity should sort as var
 			'9': { value: 'a numeric key', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			b: { value: 'another value', sourceFiles: [] },
-			z: { value: 'last value', sourceFiles: [] }
+			z: { value: 'last value', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -55,7 +57,7 @@ describe('SortByKeyPostProcessor - undefined sort sensitivity should sort as var
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all values are processed correctly
@@ -74,7 +76,7 @@ describe('SortByKeyPostProcessor - undefined sort sensitivity should sort as var
 			H: { value: 'letter H', sourceFiles: [] },
 			h: { value: 'letter h', sourceFiles: [] },
 			i: { value: 'letter i', sourceFiles: [] },
-			j: { value: 'letter j', sourceFiles: [] }
+			j: { value: 'letter j', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -93,7 +95,7 @@ describe('SortByKeyPostProcessor - undefined sort sensitivity should sort as var
 			'h',
 			'i',
 			'j',
-			'à'
+			'à',
 		]);
 	});
 });
@@ -110,7 +112,7 @@ describe('SortByKeyPostProcessor - base sensitivity should treat all base charac
 			z: { value: 'last value', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			'9': { value: 'a numeric key', sourceFiles: [] },
-			b: { value: 'another value', sourceFiles: [] }
+			b: { value: 'another value', sourceFiles: [] },
 		});
 		const extracted = new TranslationCollection();
 		const existing = new TranslationCollection();
@@ -120,7 +122,7 @@ describe('SortByKeyPostProcessor - base sensitivity should treat all base charac
 			'9': { value: 'a numeric key', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			b: { value: 'another value', sourceFiles: [] },
-			z: { value: 'last value', sourceFiles: [] }
+			z: { value: 'last value', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -143,7 +145,7 @@ describe('SortByKeyPostProcessor - base sensitivity should treat all base charac
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all values are processed correctly
@@ -162,7 +164,7 @@ describe('SortByKeyPostProcessor - base sensitivity should treat all base charac
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -181,7 +183,7 @@ describe('SortByKeyPostProcessor - base sensitivity should treat all base charac
 			'h',
 			'H',
 			'i',
-			'j'
+			'j',
 		]);
 	});
 });
@@ -198,7 +200,7 @@ describe('SortByKeyPostProcessor - accent sensitivity should sort treat lowercas
 			z: { value: 'last value', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			'9': { value: 'a numeric key', sourceFiles: [] },
-			b: { value: 'another value', sourceFiles: [] }
+			b: { value: 'another value', sourceFiles: [] },
 		});
 		const extracted = new TranslationCollection();
 		const existing = new TranslationCollection();
@@ -208,7 +210,7 @@ describe('SortByKeyPostProcessor - accent sensitivity should sort treat lowercas
 			'9': { value: 'a numeric key', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			b: { value: 'another value', sourceFiles: [] },
-			z: { value: 'last value', sourceFiles: [] }
+			z: { value: 'last value', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -231,7 +233,7 @@ describe('SortByKeyPostProcessor - accent sensitivity should sort treat lowercas
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all values are processed correctly
@@ -250,7 +252,7 @@ describe('SortByKeyPostProcessor - accent sensitivity should sort treat lowercas
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -269,7 +271,7 @@ describe('SortByKeyPostProcessor - accent sensitivity should sort treat lowercas
 			'h',
 			'H',
 			'i',
-			'j'
+			'j',
 		]);
 	});
 });
@@ -286,7 +288,7 @@ describe('SortByKeyPostProcessor - case sensitivity should treat lowercase and u
 			z: { value: 'last value', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			'9': { value: 'a numeric key', sourceFiles: [] },
-			b: { value: 'another value', sourceFiles: [] }
+			b: { value: 'another value', sourceFiles: [] },
 		});
 		const extracted = new TranslationCollection();
 		const existing = new TranslationCollection();
@@ -296,7 +298,7 @@ describe('SortByKeyPostProcessor - case sensitivity should treat lowercase and u
 			'9': { value: 'a numeric key', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			b: { value: 'another value', sourceFiles: [] },
-			z: { value: 'last value', sourceFiles: [] }
+			z: { value: 'last value', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -319,7 +321,7 @@ describe('SortByKeyPostProcessor - case sensitivity should treat lowercase and u
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all values are processed correctly
@@ -338,7 +340,7 @@ describe('SortByKeyPostProcessor - case sensitivity should treat lowercase and u
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -357,7 +359,7 @@ describe('SortByKeyPostProcessor - case sensitivity should treat lowercase and u
 			'h',
 			'H',
 			'i',
-			'j'
+			'j',
 		]);
 	});
 });
@@ -374,7 +376,7 @@ describe('SortByKeyPostProcessor - variant sensitivity should treat lowercase, u
 			z: { value: 'last value', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			'9': { value: 'a numeric key', sourceFiles: [] },
-			b: { value: 'another value', sourceFiles: [] }
+			b: { value: 'another value', sourceFiles: [] },
 		});
 		const extracted = new TranslationCollection();
 		const existing = new TranslationCollection();
@@ -384,7 +386,7 @@ describe('SortByKeyPostProcessor - variant sensitivity should treat lowercase, u
 			'9': { value: 'a numeric key', sourceFiles: [] },
 			a: { value: 'a value', sourceFiles: [] },
 			b: { value: 'another value', sourceFiles: [] },
-			z: { value: 'last value', sourceFiles: [] }
+			z: { value: 'last value', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -407,7 +409,7 @@ describe('SortByKeyPostProcessor - variant sensitivity should treat lowercase, u
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all values are processed correctly
@@ -426,7 +428,7 @@ describe('SortByKeyPostProcessor - variant sensitivity should treat lowercase, u
 			f: { value: 'letter f', sourceFiles: [] },
 			d: { value: 'letter d', sourceFiles: [] },
 			A: { value: 'letter A', sourceFiles: [] },
-			g: { value: 'letter g', sourceFiles: [] }
+			g: { value: 'letter g', sourceFiles: [] },
 		});
 
 		// Assert all keys are in the correct order
@@ -445,7 +447,7 @@ describe('SortByKeyPostProcessor - variant sensitivity should treat lowercase, u
 			'h',
 			'H',
 			'i',
-			'j'
+			'j',
 		]);
 	});
 });

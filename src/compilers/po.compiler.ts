@@ -1,7 +1,7 @@
 import { po } from 'gettext-parser';
 
-import { CompilerInterface, CompilerOptions } from './compiler.interface.js';
 import { TranslationCollection, TranslationInterface, TranslationType } from '../utils/translation.collection.js';
+import { CompilerInterface, CompilerOptions } from './compiler.interface.js';
 
 export class PoCompiler implements CompilerInterface {
 	public extension: string = 'po';
@@ -24,26 +24,22 @@ export class PoCompiler implements CompilerInterface {
 			headers: {
 				'mime-version': '1.0',
 				'content-type': 'text/plain; charset=utf-8',
-				'content-transfer-encoding': '8bit'
+				'content-transfer-encoding': '8bit',
 			},
 			translations: {
-				[this.domain]: Object.keys(collection.values)
-					.reduce(
-						(translations, key) => {
-							const entry: TranslationInterface = collection.get(key);
-							const comments = this.includeSources ? {reference: entry.sourceFiles?.join('\n')} : undefined;
-							return {
-								...translations,
-								[key]: {
-									msgid: key,
-									msgstr: entry.value,
-									comments: comments
-								}
-							};
+				[this.domain]: Object.keys(collection.values).reduce((translations, key) => {
+					const entry: TranslationInterface = collection.get(key);
+					const comments = this.includeSources ? { reference: entry.sourceFiles?.join('\n') } : undefined;
+					return {
+						...translations,
+						[key]: {
+							msgid: key,
+							msgstr: entry.value,
+							comments: comments,
 						},
-						{}
-					)
-			}
+					};
+				}, {}),
+			},
 		};
 
 		return po.compile(data, {}).toString('utf8');
@@ -57,7 +53,7 @@ export class PoCompiler implements CompilerInterface {
 			return new TranslationCollection();
 		}
 
-		const translationEntries = Object.entries(poTranslations)
+		const translationEntries = Object.entries(poTranslations);
 		const convertedTranslations: TranslationType = {};
 		for (const [msgid, message] of translationEntries) {
 			if (msgid === this.domain) {
@@ -66,7 +62,7 @@ export class PoCompiler implements CompilerInterface {
 
 			convertedTranslations[msgid] = {
 				value: message.msgstr.at(-1),
-				sourceFiles: message.comments?.reference?.split('\n') || []
+				sourceFiles: message.comments?.reference?.split('\n') || [],
 			};
 		}
 

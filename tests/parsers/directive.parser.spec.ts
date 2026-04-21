@@ -149,7 +149,7 @@ describe('DirectiveParser', () => {
 				`;
 				const keys = parser.extract(contents, templateFilename).keys();
 				expect(keys).to.deep.equal([
-					'There are currently no students in this class. The good news is, adding students is really easy! Just use the options at the top.'
+					'There are currently no students in this class. The good news is, adding students is really easy! Just use the options at the top.',
 				]);
 			});
 
@@ -287,7 +287,7 @@ describe('DirectiveParser', () => {
 						'else.block',
 						'nested.elseif.block',
 						'nested.if.block',
-						'nested.else.block'
+						'nested.else.block',
 					]);
 				});
 			});

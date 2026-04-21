@@ -9,10 +9,10 @@ import { TranslateService } from '@ngx-translate/core';
 			<h1>{{ welcomeMessage }}</h1>
 			<p>{{ descriptionMessage }}</p>
 		</div>
-	`
+	`,
 })
 export class PrivateTranslateServiceComponentFixture {
-	private readonly #translate = inject(TranslateService);
+	readonly #translate = inject(TranslateService);
 
 	readonly welcomeMessage = this.#translate.instant('private-translate-service.comp.welcome');
 	readonly descriptionMessage = this.#translate.instant('private-translate-service.comp.description');

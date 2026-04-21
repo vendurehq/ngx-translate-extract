@@ -1,18 +1,14 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "typescript"
-  ],
+  "plugins": ["typescript"],
   "categories": {
     "correctness": "error",
-	"perf": "error"
+    "perf": "error"
   },
   "env": {
     "node": true
   },
-  "ignorePatterns": [
-    "**/fixtures/**"
-  ],
+  "ignorePatterns": ["**/fixtures/**"],
   "rules": {
     "for-direction": "error",
     "getter-return": "error",
@@ -96,12 +92,7 @@
   },
   "overrides": [
     {
-      "files": [
-        "**/*.ts",
-        "**/*.tsx",
-        "**/*.mts",
-        "**/*.cts"
-      ],
+      "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
       "rules": {
         "getter-return": "off",
         "no-class-assign": "off",
@@ -121,7 +112,7 @@
         "no-with": "off"
       }
     },
-	{
+    {
       "files": ["tests/**"],
       "plugins": ["vitest"],
       "env": {
@@ -131,6 +122,6 @@
         "vitest/no-disabled-tests": "error",
         "no-unused-vars": "off"
       }
-	}
+    }
   ]
 }

@@ -424,7 +424,7 @@ describe('PipeParser', () => {
 			expect(keys).to.deep.equal(['switch.caseA', 'switch.caseB', 'switch.default']);
 		});
 
-		it('should extract keys from elements inside an @switch/@case block with multiple matching cases' ,() => {
+		it('should extract keys from elements inside an @switch/@case block with multiple matching cases', () => {
 			const contents = `
 			@switch (condition) {
 				@case (caseA)
@@ -484,7 +484,7 @@ describe('PipeParser', () => {
 				'nested.else.block',
 				'nested.elseif.block',
 				'elseif.block',
-				'else.block'
+				'else.block',
 			]);
 		});
 

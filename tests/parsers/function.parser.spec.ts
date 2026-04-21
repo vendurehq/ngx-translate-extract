@@ -72,6 +72,6 @@ describe('FunctionParser', () => {
 		}
 		`;
 		const keys = parser.extract(contents, componentFilename).keys();
-		expect(keys).to.deep.equal([ 'hello.after.as.syntax', 'hello.after.bracket.syntax']);
+		expect(keys).to.deep.equal(['hello.after.as.syntax', 'hello.after.bracket.syntax']);
 	});
 });

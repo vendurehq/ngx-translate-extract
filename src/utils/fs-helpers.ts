@@ -1,7 +1,7 @@
+import * as fs from 'node:fs';
+import * as os from 'node:os';
 import { basename, sep, posix } from 'node:path';
 
-import * as os from 'node:os';
-import * as fs from 'node:fs';
 import braces from 'braces';
 
 export function normalizeHomeDir(path: string): string {
@@ -55,7 +55,7 @@ export function normalizePaths(patterns: string[], defaultPatterns: string[] = [
 					}
 					return path;
 				})
-				.flat()
+				.flat(),
 		)
 		.flat();
 }

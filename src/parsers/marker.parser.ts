@@ -1,7 +1,8 @@
-import { ParserInterface } from './parser.interface.js';
-import { TranslationCollection } from '../utils/translation.collection.js';
-import { getNamedImportAlias, findFunctionCallExpressions, getStringsFromExpression, getAST } from '../utils/ast-helpers.js';
 import { SourceFile } from 'typescript';
+
+import { getNamedImportAlias, findFunctionCallExpressions, getStringsFromExpression, getAST } from '../utils/ast-helpers.js';
+import { TranslationCollection } from '../utils/translation.collection.js';
+import { ParserInterface } from './parser.interface.js';
 
 const MARKER_MODULE_NAME = new RegExp('ngx-translate-extract-marker');
 const MARKER_IMPORT_NAME = 'marker';

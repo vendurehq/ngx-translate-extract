@@ -1,15 +1,16 @@
-import { globSync } from 'glob';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-import { TranslationCollection, TranslationType } from '../../utils/translation.collection.js';
-import { TaskInterface } from './task.interface.js';
-import { cyan, green, bold, dim, red } from '../../utils/cli-color.js';
-import { ParserInterface } from '../../parsers/parser.interface.js';
-import { PostProcessorInterface } from '../../post-processors/post-processor.interface.js';
-import { CompilerInterface } from '../../compilers/compiler.interface.js';
+import { globSync } from 'glob';
+
 import type { CacheInterface } from '../../cache/cache-interface.js';
 import { NullCache } from '../../cache/null-cache.js';
+import { CompilerInterface } from '../../compilers/compiler.interface.js';
+import { ParserInterface } from '../../parsers/parser.interface.js';
+import { PostProcessorInterface } from '../../post-processors/post-processor.interface.js';
+import { cyan, green, bold, dim, red } from '../../utils/cli-color.js';
+import { TranslationCollection, TranslationType } from '../../utils/translation.collection.js';
+import { TaskInterface } from './task.interface.js';
 
 export interface ExtractTaskOptionsInterface {
 	replace?: boolean;
@@ -17,7 +18,7 @@ export interface ExtractTaskOptionsInterface {
 
 export class ExtractTask implements TaskInterface {
 	protected options: ExtractTaskOptionsInterface = {
-		replace: false
+		replace: false,
 	};
 
 	protected parsers: ParserInterface[] = [];
@@ -25,7 +26,11 @@ export class ExtractTask implements TaskInterface {
 	protected compiler: CompilerInterface;
 	protected cache: CacheInterface<TranslationType[]> = new NullCache<TranslationType[]>();
 
-	public constructor(protected inputs: string[], protected outputs: string[], options?: ExtractTaskOptionsInterface) {
+	public constructor(
+		protected inputs: string[],
+		protected outputs: string[],
+		options?: ExtractTaskOptionsInterface,
+	) {
 		this.inputs = inputs.map((input) => path.resolve(input));
 		this.outputs = outputs.map((output) => path.resolve(output));
 		this.options = { ...this.options, ...options };
@@ -150,7 +155,11 @@ export class ExtractTask implements TaskInterface {
 	/**
 	 * Run strings through configured post processors
 	 */
-	protected process(draft: TranslationCollection, extracted: TranslationCollection, existing: TranslationCollection): TranslationCollection {
+	protected process(
+		draft: TranslationCollection,
+		extracted: TranslationCollection,
+		existing: TranslationCollection,
+	): TranslationCollection {
 		this.postProcessors.forEach((postProcessor) => {
 			draft = postProcessor.process(draft, extracted, existing);
 		});

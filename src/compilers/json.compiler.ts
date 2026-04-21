@@ -1,8 +1,8 @@
-import { CompilerInterface, CompilerOptions } from './compiler.interface.js';
-import {TranslationCollection, TranslationInterface, TranslationType} from '../utils/translation.collection.js';
-import { stripBOM } from '../utils/utils.js';
-
 import { flatten } from 'flat';
+
+import { TranslationCollection, TranslationInterface, TranslationType } from '../utils/translation.collection.js';
+import { stripBOM } from '../utils/utils.js';
+import { CompilerInterface, CompilerOptions } from './compiler.interface.js';
 
 export class JsonCompiler implements CompilerInterface {
 	public indentation: string = '\t';
@@ -29,7 +29,9 @@ export class JsonCompiler implements CompilerInterface {
 			values = flatten(values);
 		}
 		const newValues: TranslationType = {};
-		Object.entries(values).forEach(([key, value]: [string, string]) => newValues[key] = <TranslationInterface>{value: value, sourceFiles: []});
+		Object.entries(values).forEach(
+			([key, value]: [string, string]) => (newValues[key] = <TranslationInterface>{ value: value, sourceFiles: [] }),
+		);
 		return new TranslationCollection(newValues);
 	}
 

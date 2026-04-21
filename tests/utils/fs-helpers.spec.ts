@@ -6,7 +6,7 @@ import { expandPattern, normalizeFilePath } from '../../src/utils/fs-helpers';
 
 vi.mock('node:path', async (importOriginal) => ({
 	...(await importOriginal<typeof import('node:path')>()),
-	sep: '/'
+	sep: '/',
 }));
 
 describe('normalizeFilePath', () => {
@@ -52,10 +52,6 @@ describe('expandPattern', () => {
 	it('should expand a pattern with Windows-style separator', () => {
 		vi.spyOn(path, 'sep', 'get').mockReturnValue('\\');
 		const result = expandPattern('C:\\Users\\User\\dir\\{en,fr,de}.json');
-		expect(result).toEqual([
-			'C:\\Users\\User\\dir\\en.json',
-			'C:\\Users\\User\\dir\\fr.json',
-			'C:\\Users\\User\\dir\\de.json',
-		]);
+		expect(result).toEqual(['C:\\Users\\User\\dir\\en.json', 'C:\\Users\\User\\dir\\fr.json', 'C:\\Users\\User\\dir\\de.json']);
 	});
 });

@@ -1,7 +1,7 @@
 import { describe, beforeEach, expect, it } from 'vitest';
 
-import { TranslationCollection } from '../../src/utils/translation.collection.js';
 import { PoCompiler } from '../../src/compilers/po.compiler.js';
+import { TranslationCollection } from '../../src/utils/translation.collection.js';
 
 describe('PoCompiler', () => {
 	let compiler: PoCompiler;
@@ -12,23 +12,23 @@ describe('PoCompiler', () => {
 
 	it('should still include html ', () => {
 		const collection = new TranslationCollection({
-			'A <strong>test</strong>': {value: 'Un <strong>test</strong>', sourceFiles: ['path/to/file.ts', 'path/to/other/file.ts']},
-			'With a lot of <em>html</em> included': {value: 'Avec beaucoup d\'<em>html</em> inclus', sourceFiles: ['path/to/file.ts']}
+			'A <strong>test</strong>': { value: 'Un <strong>test</strong>', sourceFiles: ['path/to/file.ts', 'path/to/other/file.ts'] },
+			'With a lot of <em>html</em> included': { value: "Avec beaucoup d'<em>html</em> inclus", sourceFiles: ['path/to/file.ts'] },
 		});
 		const result: Buffer = Buffer.from(compiler.compile(collection));
 		expect(result.toString('utf8')).to.equal(
-			'msgid ""\n'
-			+ 'msgstr ""\n"'
-			+ 'mime-version: 1.0\\n"\n"'
-			+ 'Content-Type: text/plain; charset=utf-8\\n"\n"'
-			+ 'Content-Transfer-Encoding: 8bit\\n"\n\n'
-			+ '#: path/to/file.ts\n'
-			+ '#: path/to/other/file.ts\n'
-			+ 'msgid "A <strong>test</strong>"\n'
-			+ 'msgstr "Un <strong>test</strong>"\n\n'
-			+ '#: path/to/file.ts\n'
-			+ 'msgid "With a lot of <em>html</em> included"\n'
-			+ 'msgstr "Avec beaucoup d\'<em>html</em> inclus"\n'
+			'msgid ""\n' +
+				'msgstr ""\n"' +
+				'mime-version: 1.0\\n"\n"' +
+				'Content-Type: text/plain; charset=utf-8\\n"\n"' +
+				'Content-Transfer-Encoding: 8bit\\n"\n\n' +
+				'#: path/to/file.ts\n' +
+				'#: path/to/other/file.ts\n' +
+				'msgid "A <strong>test</strong>"\n' +
+				'msgstr "Un <strong>test</strong>"\n\n' +
+				'#: path/to/file.ts\n' +
+				'msgid "With a lot of <em>html</em> included"\n' +
+				'msgstr "Avec beaucoup d\'<em>html</em> inclus"\n',
 		);
 	});
 
@@ -61,26 +61,20 @@ describe('PoCompiler', () => {
 		`;
 
 		expect(compiler.parse(poTemplate)).toMatchObject({
-			"values": {
-				"Cancel": {
-					"sourceFiles": [
-						"src/main.ts:30",
-					],
-					"value": "Abbrechen",
+			values: {
+				Cancel: {
+					sourceFiles: ['src/main.ts:30'],
+					value: 'Abbrechen',
 				},
-				"Hello, World!": {
-					"sourceFiles": [
-						"src/main.ts:14",
-					],
-					"value": "Hallo, Welt!",
+				'Hello, World!': {
+					sourceFiles: ['src/main.ts:14'],
+					value: 'Hallo, Welt!',
 				},
-				"Submit": {
-					"sourceFiles": [
-						"src/main.ts:26",
-					],
-					"value": "Absenden",
+				Submit: {
+					sourceFiles: ['src/main.ts:26'],
+					value: 'Absenden',
 				},
 			},
-		})
-	})
+		});
+	});
 });

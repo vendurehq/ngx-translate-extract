@@ -1,8 +1,9 @@
-import type { CacheInterface } from './cache-interface.js';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import type { CacheInterface } from './cache-interface.js';
 
 const getHash = (value: string) => crypto.createHash('sha256').update(value).digest('hex');
 
@@ -55,10 +56,13 @@ export class FileCache<RESULT extends object = object> implements CacheInterface
 	private sortByKey(unordered: Record<string, RESULT>): Record<string, RESULT> {
 		return Object.keys(unordered)
 			.sort()
-			.reduce((obj, key) => {
-				obj[key] = unordered[key];
-				return obj;
-			}, {} as Record<string, RESULT>);
+			.reduce(
+				(obj, key) => {
+					obj[key] = unordered[key];
+					return obj;
+				},
+				{} as Record<string, RESULT>,
+			);
 	}
 
 	private readCache(): void {

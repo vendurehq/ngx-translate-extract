@@ -1,7 +1,7 @@
 import { describe, beforeEach, expect, it } from 'vitest';
 
-import { TranslationCollection } from '../../src/utils/translation.collection.js';
 import { JsonCompiler } from '../../src/compilers/json.compiler.js';
+import { TranslationCollection } from '../../src/utils/translation.collection.js';
 
 describe('JsonCompiler', () => {
 	let compiler: JsonCompiler;
@@ -19,8 +19,8 @@ describe('JsonCompiler', () => {
 		`;
 		const collection: TranslationCollection = compiler.parse(contents);
 		expect(collection.values).to.deep.equal({
-			'key': {value: 'value', sourceFiles: []},
-			'secondKey': {value: '', sourceFiles: []}
+			key: { value: 'value', sourceFiles: [] },
+			secondKey: { value: '', sourceFiles: [] },
 		});
 	});
 });

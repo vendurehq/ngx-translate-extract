@@ -20,17 +20,17 @@ import {
 	ParenthesizedExpression,
 } from '@angular/compiler';
 
-import { ParserInterface } from './parser.interface.js';
 import { getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
 import { TranslationCollection } from '../utils/translation.collection.js';
 import { isPathAngularComponent, extractComponentInlineTemplate } from '../utils/utils.js';
+import { ParserInterface } from './parser.interface.js';
 
 export const TRANSLATE_PIPE_NAMES = ['translate', 'marker'];
 
 function traverseAstNodes<RESULT, NODE extends TmplAstNode | TmplAstElement>(
 	nodes: (NODE | null)[],
 	visitor: (node: NODE) => RESULT[],
-	accumulator: RESULT[] = []
+	accumulator: RESULT[] = [],
 ): RESULT[] {
 	for (const node of nodes) {
 		if (node) {
@@ -44,7 +44,7 @@ function traverseAstNodes<RESULT, NODE extends TmplAstNode | TmplAstElement>(
 function traverseAstNode<RESULT, NODE extends TmplAstNode | TmplAstElement>(
 	node: NODE,
 	visitor: (node: NODE) => RESULT[],
-	accumulator: RESULT[] = []
+	accumulator: RESULT[] = [],
 ): RESULT[] {
 	accumulator.push(...visitor(node));
 
@@ -132,7 +132,7 @@ export class PipeParser implements ParserInterface {
 			});
 		}
 
-		if(node instanceof TmplAstForLoopBlock) {
+		if (node instanceof TmplAstForLoopBlock) {
 			// @for (key of ["identifier" | translate]) {}
 			ret.push(...this.getTranslatablesFromAst(node.expression.ast));
 		}
@@ -228,7 +228,7 @@ export class PipeParser implements ParserInterface {
 			return this.getTranslatablesFromAsts([ast.receiver, ast.key]);
 		}
 
-		if(ast instanceof ParenthesizedExpression) {
+		if (ast instanceof ParenthesizedExpression) {
 			return this.getTranslatablesFromAsts([ast.expression]);
 		}
 
@@ -249,9 +249,6 @@ export class PipeParser implements ParserInterface {
 
 	/** Checks whether a Binary node uses a logical (&&, ||) or nullish coalescing (??) operator. */
 	protected isLogicalOrNullishCoalescingExpression(expr: unknown): expr is Binary {
-		return (
-			expr instanceof Binary &&
-			(expr.operation === '&&' || expr.operation === '||' || expr.operation === '??')
-		);
+		return expr instanceof Binary && (expr.operation === '&&' || expr.operation === '||' || expr.operation === '??');
 	}
 }
