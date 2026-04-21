@@ -1,7 +1,7 @@
 import { parseTemplate, TmplAstSwitchBlock } from '@angular/compiler';
 import { ScriptKind, tsquery } from '@phenomnomnominal/tsquery';
-import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { LanguageVariant } from 'typescript';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 
 import { getAST, getNamedImport, getNamedImportAlias, getNodesFromSwitchBlockTmpl } from '../../src/utils/ast-helpers.js';
 
@@ -171,7 +171,8 @@ describe('getNamedImportAlias()', () => {
 
 describe('getNodesFromSwitchBlockTmpl()', () => {
 	it('should extract nodes from a @switch', () => {
-		const nodes = parseTemplate(`
+		const nodes = parseTemplate(
+			`
 			@switch (condition) {
 				@case (caseA) {
 				  <div>switch.caseA</div>
@@ -183,7 +184,9 @@ describe('getNodesFromSwitchBlockTmpl()', () => {
 				  <div>switch.default</div>
 				}
 			  }
-		`, '.').nodes;
+		`,
+			'.',
+		).nodes;
 
 		expect(nodes.length).toBe(1);
 		expect(nodes.at(0)).toBeInstanceOf(TmplAstSwitchBlock);
@@ -196,7 +199,8 @@ describe('getNodesFromSwitchBlockTmpl()', () => {
 	});
 
 	it('should extract nodes from a @switch with `cases` property', () => {
-		const nodes = parseTemplate(`
+		const nodes = parseTemplate(
+			`
 			@switch (condition) {
 				@case (caseA) {
 				  <div>switch.caseA</div>
@@ -208,7 +212,9 @@ describe('getNodesFromSwitchBlockTmpl()', () => {
 				  <div>switch.default</div>
 				}
 			  }
-		`, '.').nodes;
+		`,
+			'.',
+		).nodes;
 		const switchBlockNode = nodes.at(0) as TmplAstSwitchBlock;
 
 		// Create a mock node with the 'cases' property since we cannot install an older version of angular compiler

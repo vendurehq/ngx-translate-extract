@@ -1,26 +1,26 @@
 import yargs from 'yargs';
 
-import { ExtractTask } from './tasks/extract.task.js';
+import { FileCache } from '../cache/file-cache.js';
+import { CompilerFactory } from '../compilers/compiler.factory.js';
+import { CompilerInterface, CompilerType } from '../compilers/compiler.interface.js';
+import { DirectiveParser } from '../parsers/directive.parser.js';
+import { FunctionParser } from '../parsers/function.parser.js';
+import { MarkerParser } from '../parsers/marker.parser.js';
 import { ParserInterface } from '../parsers/parser.interface.js';
 import { PipeParser } from '../parsers/pipe.parser.js';
-import { DirectiveParser } from '../parsers/directive.parser.js';
 import { ServiceParser } from '../parsers/service.parser.js';
-import { MarkerParser } from '../parsers/marker.parser.js';
-import { FunctionParser } from '../parsers/function.parser.js';
-import { PostProcessorInterface } from '../post-processors/post-processor.interface.js';
-import { SortByKeyPostProcessor } from '../post-processors/sort-by-key.post-processor.js';
 import { KeyAsDefaultValuePostProcessor } from '../post-processors/key-as-default-value.post-processor.js';
 import { KeyAsInitialDefaultValuePostProcessor } from '../post-processors/key-as-initial-default-value.post-processor.js';
 import { NullAsDefaultValuePostProcessor } from '../post-processors/null-as-default-value.post-processor.js';
-import { StringAsDefaultValuePostProcessor } from '../post-processors/string-as-default-value.post-processor.js';
+import { PostProcessorInterface } from '../post-processors/post-processor.interface.js';
 import { PurgeObsoleteKeysPostProcessor } from '../post-processors/purge-obsolete-keys.post-processor.js';
+import { SortByKeyPostProcessor } from '../post-processors/sort-by-key.post-processor.js';
+import { StringAsDefaultValuePostProcessor } from '../post-processors/string-as-default-value.post-processor.js';
 import { StripPrefixPostProcessor } from '../post-processors/strip-prefix.post-processor.js';
-import { CompilerInterface, CompilerType } from '../compilers/compiler.interface.js';
-import { CompilerFactory } from '../compilers/compiler.factory.js';
 import { green, red } from '../utils/cli-color.js';
 import { normalizePaths } from '../utils/fs-helpers.js';
-import { FileCache } from '../cache/file-cache.js';
 import { TranslationType } from '../utils/translation.collection.js';
+import { ExtractTask } from './tasks/extract.task.js';
 
 // First parsing pass to be able to access pattern argument for use input/output arguments
 const y = yargs().option('patterns', {
@@ -29,7 +29,7 @@ const y = yargs().option('patterns', {
 	type: 'array',
 	default: ['/**/*.html', '/**/*.ts'],
 	string: true,
-	hidden: true
+	hidden: true,
 });
 
 const parsed = await y.parse();
@@ -46,7 +46,7 @@ const cli = await y
 		default: [process.cwd()],
 		type: 'array',
 		normalize: true,
-		demandOption: true
+		demandOption: true,
 	})
 	.coerce('input', (input: string[]) => normalizePaths(input, parsed.patterns))
 	.option('output', {
@@ -54,37 +54,37 @@ const cli = await y
 		describe: 'Paths where you would like to save extracted strings. You can use path expansion, glob patterns and multiple paths',
 		type: 'array',
 		normalize: true,
-		demandOption: true
+		demandOption: true,
 	})
 	.coerce('output', (output: string[]) => normalizePaths(output, parsed.patterns))
 	.option('format', {
 		alias: 'f',
 		describe: 'Format',
 		default: CompilerType.Json,
-		choices: [CompilerType.Json, CompilerType.NamespacedJson, CompilerType.Pot]
+		choices: [CompilerType.Json, CompilerType.NamespacedJson, CompilerType.Pot],
 	})
 	.option('format-indentation', {
 		alias: 'fi',
 		describe: 'Format indentation (JSON/Namedspaced JSON)',
 		default: '\t',
-		type: 'string'
+		type: 'string',
 	})
 	.option('replace', {
 		alias: 'r',
 		describe: 'Replace the contents of output file if it exists (Merges by default)',
-		type: 'boolean'
+		type: 'boolean',
 	})
 	.option('sort', {
 		alias: 's',
 		describe: 'Sort strings in alphabetical order',
-		type: 'boolean'
+		type: 'boolean',
 	})
 	.option('sort-sensitivity', {
 		alias: 'ss',
 		describe: 'Sort sensitivitiy of strings (only to be used when sorting)',
 		type: 'string',
 		choices: ['base', 'accent', 'case', 'variant'],
-		default: undefined
+		default: undefined,
 	})
 	.option('po-source-locations', {
 		describe: 'Include file location comments in .po files',
@@ -94,54 +94,70 @@ const cli = await y
 	.option('clean', {
 		alias: 'c',
 		describe: 'Remove obsolete strings after merge',
-		type: 'boolean'
+		type: 'boolean',
 	})
 	.option('cache-file', {
 		describe: 'Cache parse results to speed up consecutive runs',
-		type: 'string'
+		type: 'string',
 	})
 	.option('marker', {
 		alias: 'm',
 		describe: 'Name of a custom marker function for extracting strings',
 		type: 'string',
-		default: undefined
+		default: undefined,
 	})
 	.option('key-as-default-value', {
 		alias: 'k',
 		describe: 'Use key as default value',
 		type: 'boolean',
-		conflicts: ['key-as-initial-default-value', 'null-as-default-value', 'string-as-default-value']
+		conflicts: ['key-as-initial-default-value', 'null-as-default-value', 'string-as-default-value'],
 	})
 	.option('key-as-initial-default-value', {
 		alias: 'ki',
 		describe: 'Use key as initial default value',
 		type: 'boolean',
-		conflicts: ['key-as-default-value', 'null-as-default-value', 'string-as-default-value']
+		conflicts: ['key-as-default-value', 'null-as-default-value', 'string-as-default-value'],
 	})
 	.option('null-as-default-value', {
 		alias: 'n',
 		describe: 'Use null as default value',
 		type: 'boolean',
-		conflicts: ['key-as-default-value', 'key-as-initial-default-value', 'string-as-default-value']
+		conflicts: ['key-as-default-value', 'key-as-initial-default-value', 'string-as-default-value'],
 	})
 	.option('string-as-default-value', {
 		alias: 'd',
 		describe: 'Use string as default value',
 		type: 'string',
-		conflicts: ['null-as-default-value', 'key-as-default-value', 'key-as-initial-default-value']
+		conflicts: ['null-as-default-value', 'key-as-default-value', 'key-as-initial-default-value'],
 	})
 	.option('strip-prefix', {
 		alias: 'sp',
 		describe: 'Strip a prefix from the extracted key',
-		type: 'string'
+		type: 'string',
 	})
 	.option('trailing-newline', {
 		describe: 'Add a trailing newline to the output',
 		type: 'boolean',
-		default: false
+		default: false,
 	})
-	.group(['format', 'format-indentation', 'sort', 'sort-sensitivity', 'clean', 'replace', 'strip-prefix', 'trailing-newline', 'po-source-locations'], 'Output')
-	.group(['key-as-default-value', 'key-as-initial-default-value', 'null-as-default-value', 'string-as-default-value'], 'Extracted key value (defaults to empty string)')
+	.group(
+		[
+			'format',
+			'format-indentation',
+			'sort',
+			'sort-sensitivity',
+			'clean',
+			'replace',
+			'strip-prefix',
+			'trailing-newline',
+			'po-source-locations',
+		],
+		'Output',
+	)
+	.group(
+		['key-as-default-value', 'key-as-initial-default-value', 'null-as-default-value', 'string-as-default-value'],
+		'Extracted key value (defaults to empty string)',
+	)
 	.conflicts('key-as-default-value', 'null-as-default-value')
 	.conflicts('key-as-initial-default-value', 'null-as-default-value')
 	.example('$0 -i ./src-a/ -i ./src-b/ -o strings.json', 'Extract (ts, html) from multiple paths')
@@ -156,7 +172,7 @@ const cli = await y
 	.parse(process.argv);
 
 const extractTask = new ExtractTask(cli.input, cli.output, {
-	replace: cli.replace
+	replace: cli.replace,
 });
 
 // Parsers

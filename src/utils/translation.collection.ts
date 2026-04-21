@@ -17,22 +17,20 @@ export class TranslationCollection {
 	}
 
 	public add(key: string, val: string, sourceFile: string): TranslationCollection {
-		const translation = this.values[key]
-			? {...this.values[key]}
-			: {value: val, sourceFiles: []};
+		const translation = this.values[key] ? { ...this.values[key] } : { value: val, sourceFiles: [] };
 		translation.sourceFiles.push(normalizeFilePath(sourceFile));
-		return new TranslationCollection({...this.values, [key]: translation});
+		return new TranslationCollection({ ...this.values, [key]: translation });
 	}
 
 	public addKeys(keys: string[], sourceFile: string): TranslationCollection {
 		const values = keys.reduce(
 			(results, key) => ({
 				...results,
-				[key]: <TranslationInterface>{value: '', sourceFiles: [normalizeFilePath(sourceFile)]}
+				[key]: <TranslationInterface>{ value: '', sourceFiles: [normalizeFilePath(sourceFile)] },
 			}),
-			{} as TranslationType
+			{} as TranslationType,
 		);
-		return new TranslationCollection({...this.values, ...values});
+		return new TranslationCollection({ ...this.values, ...values });
 	}
 
 	public remove(key: string): TranslationCollection {
@@ -106,9 +104,9 @@ export class TranslationCollection {
 		return new TranslationCollection(values);
 	}
 
-	public toKeyValueObject(): {[key: string]: string} {
-		const jsonTranslations: {[key: string]: string} = {};
-		Object.entries(this.values).map(([key, value]: [string, TranslationInterface]) => jsonTranslations[key] = value.value);
+	public toKeyValueObject(): { [key: string]: string } {
+		const jsonTranslations: { [key: string]: string } = {};
+		Object.entries(this.values).map(([key, value]: [string, TranslationInterface]) => (jsonTranslations[key] = value.value));
 		return jsonTranslations;
 	}
 

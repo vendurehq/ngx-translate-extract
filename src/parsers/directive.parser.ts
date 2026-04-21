@@ -23,10 +23,10 @@ import {
 	ParenthesizedExpression,
 } from '@angular/compiler';
 
-import { ParserInterface } from './parser.interface.js';
 import { getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
 import { TranslationCollection } from '../utils/translation.collection.js';
 import { extractComponentInlineTemplate, isPathAngularComponent } from '../utils/utils.js';
+import { ParserInterface } from './parser.interface.js';
 
 interface BlockNode {
 	nameSpan: ParseSourceSpan;

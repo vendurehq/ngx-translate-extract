@@ -11,6 +11,8 @@ export class StringAsDefaultValuePostProcessor implements PostProcessorInterface
 	public constructor(protected options: Options) {}
 
 	public process(draft: TranslationCollection, extracted: TranslationCollection, existing: TranslationCollection): TranslationCollection {
-		return draft.map((key, val) => (existing.get(key) === undefined ? {value: this.options.defaultValue, sourceFiles: (val?.sourceFiles || [])} : val));
+		return draft.map((key, val) =>
+			existing.get(key) === undefined ? { value: this.options.defaultValue, sourceFiles: val?.sourceFiles || [] } : val,
+		);
 	}
 }

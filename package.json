@@ -11,6 +11,8 @@
     "watch": "npm run clean && tsc --watch",
     "clean": "tsc --build --clean",
     "test": "vitest",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "lint": "oxlint"
   },
   "dependencies": {
@@ -27,8 +29,8 @@
     "@types/gettext-parser": "^9.0.0",
     "@types/node": "^20.19.30",
     "@types/yargs": "^17.0.35",
+    "oxfmt": "^0.46.0",
     "oxlint": "^1.41.0",
-    "prettier": "^3.8.1",
     "typescript": "~5.9.2",
     "vitest": "^4.0.18"
   },

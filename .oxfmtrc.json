@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 140,
+  "useTabs": false,
+  "tabWidth": 2,
+  "sortPackageJson": false,
+  "sortImports": true,
+  "ignorePatterns": ["*.md", "tsconfig*.json"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "options": {
+        "useTabs": true,
+        "tabWidth": 4
+      }
+    }
+  ]
+}

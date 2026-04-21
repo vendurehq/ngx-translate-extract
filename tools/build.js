@@ -1,10 +1,10 @@
 #! /usr/bin/env node
 
-import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { styleText } from 'node:util';
-import { join, resolve } from 'node:path';
 import { execSync } from 'node:child_process';
+import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import { stdout } from 'node:process';
+import { styleText } from 'node:util';
 
 import { parseConfigFileTextToJson } from 'typescript';
 
@@ -32,7 +32,7 @@ stdout.write(`${CARRIAGE_CHAR}✔  Emptying '${outDir}' directory\n`);
 
 // Copy assets
 const filesToCopy = ['LICENSE', 'README.md'];
-filesToCopy.forEach(fileName => {
+filesToCopy.forEach((fileName) => {
   console.log(`ℹ  Copying ${fileName}`);
   copyFileSync(fileName, join(resolvedOutDir, fileName));
 });
@@ -42,7 +42,7 @@ const pkgPath = resolve(process.cwd(), 'package.json');
 const packageJson = JSON.parse(readFileSync(pkgPath, 'utf-8'));
 
 const keysToRemove = ['devDependencies', 'scripts'];
-keysToRemove.forEach(key => {
+keysToRemove.forEach((key) => {
   console.log(`ℹ  Removing ${key} from package.json`);
   delete packageJson[key];
 });

@@ -1,4 +1,5 @@
 import { describe, beforeEach, expect, it } from 'vitest';
+
 import { PostProcessorInterface } from '../../src/post-processors/post-processor.interface.js';
 import { StripPrefixPostProcessor } from '../../src/post-processors/strip-prefix.post-processor.js';
 import { TranslationCollection } from '../../src/utils/translation.collection.js';
@@ -15,7 +16,7 @@ describe('StripPrefixPostProcessor', () => {
 		const extracted = new TranslationCollection({ 'TEST.StringA': { value: '', sourceFiles: [] } });
 		const existing = new TranslationCollection();
 		expect(processor.process(draft, extracted, existing).values).to.deep.equal({
-			StringA: { value: '', sourceFiles: [] }
+			StringA: { value: '', sourceFiles: [] },
 		});
 	});
 
@@ -24,7 +25,7 @@ describe('StripPrefixPostProcessor', () => {
 		const extracted = new TranslationCollection({ 'DUMMY.TEST.StringA': { value: '', sourceFiles: [] } });
 		const existing = new TranslationCollection();
 		expect(processor.process(draft, extracted, existing).values).to.deep.equal({
-			'DUMMY.TEST.StringA': { value: '', sourceFiles: [] }
+			'DUMMY.TEST.StringA': { value: '', sourceFiles: [] },
 		});
 	});
 
@@ -32,18 +33,18 @@ describe('StripPrefixPostProcessor', () => {
 		const draft = new TranslationCollection({
 			'test.StringA': { value: '', sourceFiles: [] },
 			'teST.StringB': { value: '', sourceFiles: [] },
-			'Test.StringC': { value: '', sourceFiles: [] }
+			'Test.StringC': { value: '', sourceFiles: [] },
 		});
 		const extracted = new TranslationCollection({
 			'test.StringA': { value: '', sourceFiles: [] },
 			'teST.StringB': { value: '', sourceFiles: [] },
-			'Test.StringC': { value: '', sourceFiles: [] }
+			'Test.StringC': { value: '', sourceFiles: [] },
 		});
 		const existing = new TranslationCollection();
 		expect(processor.process(draft, extracted, existing).values).to.deep.equal({
 			StringA: { value: '', sourceFiles: [] },
 			StringB: { value: '', sourceFiles: [] },
-			StringC: { value: '', sourceFiles: [] }
+			StringC: { value: '', sourceFiles: [] },
 		});
 	});
 });

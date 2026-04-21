@@ -14,9 +14,9 @@ import { TranslateService } from '@ngx-translate/core';
 			<button type="button" (click)="showMore.set(false)">{{ showLessLabel }}</button>
 			<p>{{ detailsMessage }}</p>
 		} @else {
-		 	<button type="button" (click)="showMore.set(true)">{{ showMoreLabel }}</button>
+			<button type="button" (click)="showMore.set(true)">{{ showMoreLabel }}</button>
 		}
-	`
+	`,
 })
 export class TranslateServiceComponentFixture {
 	private readonly translate = inject(TranslateService);

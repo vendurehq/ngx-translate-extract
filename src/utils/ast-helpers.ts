@@ -12,7 +12,7 @@ import pkg, {
 	StringLiteral,
 	SourceFile,
 	PropertyDeclaration,
-	PropertyAccessExpression
+	PropertyAccessExpression,
 } from 'typescript';
 
 // Importing non-type members from 'typescript' this way to prevent runtime errors such as:
@@ -25,7 +25,7 @@ const {
 	isConditionalExpression,
 	isPropertyAccessExpression,
 	isStringLiteralLike,
-	SyntaxKind
+	SyntaxKind,
 } = pkg;
 
 export function getAST(source: string, fileName = ''): SourceFile {
@@ -33,7 +33,7 @@ export function getAST(source: string, fileName = ''): SourceFile {
 		'.js': ScriptKind.JS,
 		'.jsx': ScriptKind.JSX,
 		'.ts': ScriptKind.TS,
-		'.tsx': ScriptKind.TSX
+		'.tsx': ScriptKind.TSX,
 	};
 
 	const scriptKind = supportedScriptTypes[extname(fileName)] ?? ScriptKind.TS;
@@ -113,7 +113,7 @@ export function findClassPropertiesByType(node: ClassDeclaration, type: string):
 		...findClassPropertiesConstructorParameterByType(node, type),
 		...findClassPropertiesDeclarationByType(node, type),
 		...findClassPropertiesDeclarationByInject(node, type),
-		...findClassPropertiesGetterByType(node, type)
+		...findClassPropertiesGetterByType(node, type),
 	];
 }
 

@@ -1,10 +1,8 @@
-import path from 'node:path';
 import fs from 'node:fs';
+import path from 'node:path';
 
 import { ClassDeclaration, CallExpression, SourceFile, findConfigFile, parseConfigFileTextToJson } from 'typescript';
 
-import { ParserInterface } from './parser.interface.js';
-import { TranslationCollection } from '../utils/translation.collection.js';
 import {
 	findClassDeclarations,
 	findClassPropertiesByType,
@@ -19,8 +17,10 @@ import {
 	findVariableNameByInjectType,
 	findInlineInjectCallExpressions,
 	getAST,
-	getNamedImport
+	getNamedImport,
 } from '../utils/ast-helpers.js';
+import { TranslationCollection } from '../utils/translation.collection.js';
+import { ParserInterface } from './parser.interface.js';
 
 const TRANSLATE_SERVICE_TYPE_REFERENCE = 'TranslateService';
 const TRANSLATE_SERVICE_METHOD_NAMES = ['get', 'instant', 'stream'];
@@ -44,14 +44,18 @@ export class ServiceParser implements ParserInterface {
 		functionDeclarations.forEach((fnDeclaration) => {
 			const translateServiceVariableName = findVariableNameByInjectType(fnDeclaration, TRANSLATE_SERVICE_TYPE_REFERENCE);
 			const callExpressions = findMethodCallExpressions(sourceFile, translateServiceVariableName, TRANSLATE_SERVICE_METHOD_NAMES);
-			const inlineInjectCallExpressions = findInlineInjectCallExpressions(sourceFile, TRANSLATE_SERVICE_TYPE_REFERENCE, TRANSLATE_SERVICE_METHOD_NAMES);
+			const inlineInjectCallExpressions = findInlineInjectCallExpressions(
+				sourceFile,
+				TRANSLATE_SERVICE_TYPE_REFERENCE,
+				TRANSLATE_SERVICE_METHOD_NAMES,
+			);
 			translateServiceCallExpressions.push(...callExpressions, ...inlineInjectCallExpressions);
 		});
 
 		classDeclarations.forEach((classDeclaration) => {
 			const callExpressions = [
 				...this.findConstructorParamCallExpressions(classDeclaration),
-				...this.findPropertyCallExpressions(classDeclaration, sourceFile)
+				...this.findPropertyCallExpressions(classDeclaration, sourceFile),
 			];
 
 			translateServiceCallExpressions.push(...callExpressions);
@@ -76,7 +80,11 @@ export class ServiceParser implements ParserInterface {
 		}
 		const paramName = findMethodParameterByType(constructorDeclaration, TRANSLATE_SERVICE_TYPE_REFERENCE);
 		const methodCallExpressions = findMethodCallExpressions(constructorDeclaration, paramName, TRANSLATE_SERVICE_METHOD_NAMES);
-		const inlineInjectCallExpressions = findInlineInjectCallExpressions(constructorDeclaration, TRANSLATE_SERVICE_TYPE_REFERENCE, TRANSLATE_SERVICE_METHOD_NAMES)
+		const inlineInjectCallExpressions = findInlineInjectCallExpressions(
+			constructorDeclaration,
+			TRANSLATE_SERVICE_TYPE_REFERENCE,
+			TRANSLATE_SERVICE_METHOD_NAMES,
+		);
 		// Calls of the TranslateService when injected using the inject function within the constructor
 		const translateServiceLocalVariableName = findVariableNameByInjectType(constructorDeclaration, TRANSLATE_SERVICE_TYPE_REFERENCE);
 		const localVariableCallExpressions = translateServiceLocalVariableName
@@ -157,14 +165,15 @@ export class ServiceParser implements ParserInterface {
 			const superClassFileContent = fs.readFileSync(file, 'utf8');
 			const superClassAst = getAST(superClassFileContent, file);
 			const superClassDeclarations = findClassDeclarations(superClassAst, superClassName);
-			const superClassPropertyNames = superClassDeclarations
-				.flatMap((superClassDeclaration) => findClassPropertiesByType(superClassDeclaration, TRANSLATE_SERVICE_TYPE_REFERENCE));
+			const superClassPropertyNames = superClassDeclarations.flatMap((superClassDeclaration) =>
+				findClassPropertiesByType(superClassDeclaration, TRANSLATE_SERVICE_TYPE_REFERENCE),
+			);
 			if (superClassPropertyNames.length > 0) {
 				ServiceParser.propertyMap.set(cacheKey, superClassPropertyNames);
 				allSuperClassPropertyNames.push(...superClassPropertyNames);
 			} else {
 				superClassDeclarations.forEach((declaration) =>
-					allSuperClassPropertyNames.push(...this.findParentClassProperties(declaration, superClassAst))
+					allSuperClassPropertyNames.push(...this.findParentClassProperties(declaration, superClassAst)),
 				);
 			}
 		});

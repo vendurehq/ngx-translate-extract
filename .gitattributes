@@ -1,0 +1,8 @@
+# Handle line endings automatically for files detected as text
+* text=auto eol=lf
+
+# Explicitly set endings for specific file types
+*.ts text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.md text eol=lf

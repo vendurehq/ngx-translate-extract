@@ -10,6 +10,6 @@ import { TranslateDirective } from '@ngx-translate/core';
 			<h1 [translate]="'directive.comp.welcome'"></h1>
 			<p [translate]="'directive.comp.description'"></p>
 		</div>
-	`
+	`,
 })
 export class TranslateDirectiveComponentFixture {}
