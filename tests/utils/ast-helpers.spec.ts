@@ -19,7 +19,7 @@ describe('getAST()', () => {
 		const result = getAST(source, fileName);
 
 		expect(tsqueryAstSpy).toHaveBeenCalledWith(source, fileName, ScriptKind.TS);
-		expect(result.languageVariant).toBe(LanguageVariant.Standard);
+		expect(result.parsedFile.languageVariant).toBe(LanguageVariant.Standard);
 	});
 
 	it('should return the AST for a TypeScript source with a .tsx file extension', () => {
@@ -29,7 +29,7 @@ describe('getAST()', () => {
 		const result = getAST(source, fileName);
 
 		expect(tsqueryAstSpy).toHaveBeenCalledWith(source, fileName, ScriptKind.TSX);
-		expect(result.languageVariant).toBe(LanguageVariant.JSX);
+		expect(result.parsedFile.languageVariant).toBe(LanguageVariant.JSX);
 	});
 
 	it('should return the AST for a JavaScript source with a .js file extension', () => {
@@ -40,7 +40,7 @@ describe('getAST()', () => {
 
 		expect(tsqueryAstSpy).toHaveBeenCalledWith(source, fileName, ScriptKind.JS);
 		// JS files also return JSX language variant.
-		expect(result.languageVariant).toBe(LanguageVariant.JSX);
+		expect(result.parsedFile.languageVariant).toBe(LanguageVariant.JSX);
 	});
 
 	it('should return the AST for a JavaScript source with a .jsx file extension', () => {
@@ -50,7 +50,7 @@ describe('getAST()', () => {
 		const result = getAST(source, fileName);
 
 		expect(tsqueryAstSpy).toHaveBeenCalledWith(source, fileName, ScriptKind.JSX);
-		expect(result.languageVariant).toBe(LanguageVariant.JSX);
+		expect(result.parsedFile.languageVariant).toBe(LanguageVariant.JSX);
 	});
 
 	it('should use ScriptKind.TS if the file extension is unsupported', () => {
@@ -60,7 +60,7 @@ describe('getAST()', () => {
 		const result = getAST(source, fileName);
 
 		expect(tsqueryAstSpy).toHaveBeenCalledWith(source, fileName, ScriptKind.TS);
-		expect(result.languageVariant).toBe(LanguageVariant.Standard);
+		expect(result.parsedFile.languageVariant).toBe(LanguageVariant.Standard);
 	});
 
 	it('should use ScriptKind.TS if no file name is provided', () => {
@@ -69,7 +69,7 @@ describe('getAST()', () => {
 		const result = getAST(source);
 
 		expect(tsqueryAstSpy).toHaveBeenCalledWith(source, '', ScriptKind.TS);
-		expect(result.languageVariant).toBe(LanguageVariant.Standard);
+		expect(result.parsedFile.languageVariant).toBe(LanguageVariant.Standard);
 	});
 });
 
