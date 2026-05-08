@@ -20,9 +20,8 @@ import {
 	ParenthesizedExpression,
 } from '@angular/compiler';
 
-import { getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
+import { getAST, getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
 import { TranslationCollection } from '../utils/translation.collection.js';
-import { isPathAngularComponent, extractComponentInlineTemplate } from '../utils/utils.js';
 import { ParserInterface } from './parser.interface.js';
 
 export const TRANSLATE_PIPE_NAMES = ['translate', 'marker'];
@@ -82,13 +81,12 @@ function traverseAstNode<RESULT, NODE extends TmplAstNode | TmplAstElement>(
 
 export class PipeParser implements ParserInterface {
 	public extract(source: string, filePath: string): TranslationCollection {
-		if (filePath && isPathAngularComponent(filePath)) {
-			source = extractComponentInlineTemplate(source);
+		const parsedTemplates = getAST(source, filePath).parsedTemplates;
+		if (parsedTemplates.length === 0) {
+			return new TranslationCollection();
 		}
-
 		let collection: TranslationCollection = new TranslationCollection();
-		const nodes: TmplAstNode[] = this.parseTemplate(source, filePath);
-
+		const nodes: TmplAstNode[] = parsedTemplates.map((parsedTpl) => parsedTpl.nodes).flat();
 		const pipes = traverseAstNodes(nodes, (node) => this.findPipesInNode(node));
 
 		pipes.forEach((pipe) => {

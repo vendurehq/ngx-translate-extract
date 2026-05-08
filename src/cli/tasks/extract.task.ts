@@ -8,6 +8,7 @@ import { NullCache } from '../../cache/null-cache.js';
 import { CompilerInterface } from '../../compilers/compiler.interface.js';
 import { ParserInterface } from '../../parsers/parser.interface.js';
 import { PostProcessorInterface } from '../../post-processors/post-processor.interface.js';
+import { clearAstCache } from '../../utils/ast-helpers.js';
 import { cyan, green, bold, dim, red } from '../../utils/cli-color.js';
 import { TranslationCollection, TranslationType } from '../../utils/translation.collection.js';
 import { TaskInterface } from './task.interface.js';
@@ -137,6 +138,7 @@ export class ExtractTask implements TaskInterface {
 				});
 
 				collectionTypes.push(...cachedCollectionValues);
+				clearAstCache();
 			});
 		});
 

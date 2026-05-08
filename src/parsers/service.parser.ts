@@ -29,7 +29,12 @@ export class ServiceParser implements ParserInterface {
 	private static propertyMap = new Map<string, string[]>();
 
 	public extract(source: string, filePath: string): TranslationCollection | null {
-		const sourceFile = getAST(source, filePath);
+		const sourceFile = getAST(source, filePath).parsedFile;
+
+		if (!sourceFile) {
+			return null;
+		}
+
 		const classDeclarations = findClassDeclarations(sourceFile);
 		const functionDeclarations = findFunctionExpressions(sourceFile);
 
@@ -163,8 +168,8 @@ export class ServiceParser implements ParserInterface {
 		const allSuperClassPropertyNames: string[] = [];
 		potentialSuperFiles.forEach((file) => {
 			const superClassFileContent = fs.readFileSync(file, 'utf8');
-			const superClassAst = getAST(superClassFileContent, file);
-			const superClassDeclarations = findClassDeclarations(superClassAst, superClassName);
+			const superClassAst = getAST(superClassFileContent, file).parsedFile;
+			const superClassDeclarations = superClassAst ? findClassDeclarations(superClassAst, superClassName) : [];
 			const superClassPropertyNames = superClassDeclarations.flatMap((superClassDeclaration) =>
 				findClassPropertiesByType(superClassDeclaration, TRANSLATE_SERVICE_TYPE_REFERENCE),
 			);

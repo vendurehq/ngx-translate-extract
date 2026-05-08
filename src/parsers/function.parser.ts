@@ -9,7 +9,11 @@ export class FunctionParser implements ParserInterface {
 	constructor(private fnName: string) {}
 
 	public extract(source: string, filePath: string): TranslationCollection | null {
-		const sourceFile = getAST(source, filePath);
+		const sourceFile = getAST(source, filePath).parsedFile;
+
+		if (!sourceFile) {
+			return null;
+		}
 
 		let collection: TranslationCollection = new TranslationCollection();
 

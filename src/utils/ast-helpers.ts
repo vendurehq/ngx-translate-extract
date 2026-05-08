@@ -1,19 +1,34 @@
 import { extname } from 'node:path';
 
-import { TmplAstNode, TmplAstSwitchBlock } from '@angular/compiler';
+import { ParsedTemplate, parseTemplate, type TmplAstNode, TmplAstSwitchBlock } from '@angular/compiler';
 import { ScriptKind, tsquery } from '@phenomnomnominal/tsquery';
 import pkg, {
-	Node,
-	Identifier,
-	ClassDeclaration,
-	ConstructorDeclaration,
-	CallExpression,
-	Expression,
-	StringLiteral,
-	SourceFile,
-	PropertyDeclaration,
-	PropertyAccessExpression,
+	type CallExpression,
+	type ClassDeclaration,
+	type ConstructorDeclaration,
+	type Expression,
+	type Identifier,
+	type Node,
+	type PropertyAccessExpression,
+	type PropertyAssignment,
+	type PropertyDeclaration,
+	type SourceFile,
+	type StringLiteral,
 } from 'typescript';
+
+interface ParsedScriptSource {
+	source: string;
+	parsedFile: SourceFile;
+	parsedTemplates: ParsedTemplate[];
+}
+
+interface ParsedTemplateSource {
+	source: string;
+	parsedFile: null;
+	parsedTemplates: [ParsedTemplate];
+}
+
+type ParsedSource = ParsedScriptSource | ParsedTemplateSource;
 
 // Importing non-type members from 'typescript' this way to prevent runtime errors such as:
 // `SyntaxError: Named export 'isCallExpression' not found. The requested module 'typescript' is a CommonJS module,
@@ -28,17 +43,76 @@ const {
 	SyntaxKind,
 } = pkg;
 
-export function getAST(source: string, fileName = ''): SourceFile {
-	const supportedScriptTypes: Record<string, ScriptKind> = {
-		'.js': ScriptKind.JS,
-		'.jsx': ScriptKind.JSX,
-		'.ts': ScriptKind.TS,
-		'.tsx': ScriptKind.TSX,
-	};
+const ANGULAR_TEMPLATE_KIND = ScriptKind.Unknown; // Unknown for ts
 
-	const scriptKind = supportedScriptTypes[extname(fileName)] ?? ScriptKind.TS;
+const SCRIPT_TYPES = new Map([
+	['.js', ScriptKind.JS],
+	['.mjs', ScriptKind.JS],
+	['.jsx', ScriptKind.JSX],
+	['.ts', ScriptKind.TS],
+	['.mts', ScriptKind.TS],
+	['.tsx', ScriptKind.TSX],
+	['.html', ANGULAR_TEMPLATE_KIND],
+]);
 
-	return tsquery.ast(source, fileName, scriptKind);
+const AST_CACHE = new Map<string, ParsedSource>();
+
+export function clearAstCache(): void {
+	AST_CACHE.clear();
+}
+
+export function getAST(source: string, fileName = ''): ParsedSource {
+	// Skip cache if no fileName is provided
+	if (!fileName) {
+		return parseSource(source, fileName);
+	}
+
+	const cached = AST_CACHE.get(fileName);
+	if (cached && cached.source === source) {
+		return cached;
+	}
+
+	const result = parseSource(source, fileName);
+	AST_CACHE.set(fileName, result);
+
+	return result;
+}
+
+export function parseSource(source: string, fileName = ''): ParsedSource {
+	const scriptKind = SCRIPT_TYPES.get(extname(fileName)) ?? ScriptKind.TS;
+
+	// Angular template, pass to Angular compiler.
+	if (scriptKind === ANGULAR_TEMPLATE_KIND) {
+		return {
+			source,
+			parsedFile: null,
+			parsedTemplates: [parseTemplate(source, fileName, { collectCommentNodes: false })],
+		};
+	}
+
+	const parsedFile = tsquery.ast(source, fileName, scriptKind);
+	const parsedTemplates: ParsedTemplate[] = [];
+
+	// Check for possible inline templates that need to be processed by the Angular compiler.
+	if (source.includes('@Component(') && source.includes('template:')) {
+		getComponentInlineTemplate(parsedFile).forEach((templateNode) => {
+			const tpl = templateNode.initializer;
+			if (isStringLiteralLike(tpl)) {
+				parsedTemplates.push(parseTemplate(tpl.text, fileName, { collectCommentNodes: false }));
+			}
+		});
+	}
+
+	return { source, parsedFile, parsedTemplates };
+}
+
+/**
+ * Retrieves inline `template` property assignments from Angular `@Component` decorators.
+ */
+export function getComponentInlineTemplate(node: Node): PropertyAssignment[] {
+	const query =
+		'Decorator > CallExpression:has(Identifier[name="Component"]) ObjectLiteralExpression > PropertyAssignment:has(Identifier[name="template"])';
+	return tsquery<PropertyAssignment>(node, query);
 }
 
 /**

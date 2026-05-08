@@ -21,11 +21,11 @@ import {
 	TmplAstForLoopBlock,
 	TmplAstDeferredBlock,
 	ParenthesizedExpression,
+	TmplAstNode,
 } from '@angular/compiler';
 
-import { getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
+import { getAST, getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
 import { TranslationCollection } from '../utils/translation.collection.js';
-import { extractComponentInlineTemplate, isPathAngularComponent } from '../utils/utils.js';
 import { ParserInterface } from './parser.interface.js';
 
 interface BlockNode {
@@ -44,10 +44,13 @@ export class DirectiveParser implements ParserInterface {
 	public extract(source: string, filePath: string): TranslationCollection | null {
 		let collection: TranslationCollection = new TranslationCollection();
 
-		if (filePath && isPathAngularComponent(filePath)) {
-			source = extractComponentInlineTemplate(source);
+		const parsedTemplates = getAST(source, filePath).parsedTemplates;
+
+		if (parsedTemplates.length === 0) {
+			return null;
 		}
-		const nodes: Node[] = this.parseTemplate(source, filePath);
+
+		const nodes: TmplAstNode[] = parsedTemplates.map((parsedTpl) => parsedTpl.nodes).flat();
 		const elements: ElementLike[] = this.getElementsWithTranslateAttribute(nodes);
 
 		elements.forEach((element) => {
