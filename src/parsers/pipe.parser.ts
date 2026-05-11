@@ -18,6 +18,7 @@ import {
 	KeyedRead,
 	ASTWithSource,
 	ParenthesizedExpression,
+	TemplateLiteral,
 } from '@angular/compiler';
 
 import { getAST, getNodesFromSwitchBlockTmpl } from '../utils/ast-helpers.js';
@@ -228,6 +229,10 @@ export class PipeParser implements ParserInterface {
 
 		if (ast instanceof ParenthesizedExpression) {
 			return this.getTranslatablesFromAsts([ast.expression]);
+		}
+
+		if (ast instanceof TemplateLiteral) {
+			return this.getTranslatablesFromAsts(ast.expressions);
 		}
 
 		return [];
