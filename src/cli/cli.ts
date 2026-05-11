@@ -9,6 +9,7 @@ import { MarkerParser } from '../parsers/marker.parser.js';
 import { ParserInterface } from '../parsers/parser.interface.js';
 import { PipeParser } from '../parsers/pipe.parser.js';
 import { ServiceParser } from '../parsers/service.parser.js';
+import { TranslateFunctionParser } from '../parsers/translate-function.parser.js';
 import { KeyAsDefaultValuePostProcessor } from '../post-processors/key-as-default-value.post-processor.js';
 import { KeyAsInitialDefaultValuePostProcessor } from '../post-processors/key-as-initial-default-value.post-processor.js';
 import { NullAsDefaultValuePostProcessor } from '../post-processors/null-as-default-value.post-processor.js';
@@ -176,7 +177,7 @@ const extractTask = new ExtractTask(cli.input, cli.output, {
 });
 
 // Parsers
-const parsers: ParserInterface[] = [new PipeParser(), new DirectiveParser(), new ServiceParser()];
+const parsers: ParserInterface[] = [new PipeParser(), new DirectiveParser(), new ServiceParser(), new TranslateFunctionParser()];
 if (cli.marker) {
 	parsers.push(new FunctionParser(cli.marker));
 } else {

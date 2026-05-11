@@ -2,11 +2,11 @@
 
 exports[`CLI Integration Tests > extracts translation keys to a .json file 1`] = `
 "{
-	"translate-service.comp.welcome": "",
 	"translate-service.comp.description": "",
 	"translate-service.comp.details": "",
 	"translate-service.comp.show-more-label": "",
 	"translate-service.comp.show-less-label": "",
+	"translate-service.comp.welcome": "",
 	"pipe.comp.welcome": "",
 	"pipe.comp.description": "",
 	"directive.comp.welcome": "",
@@ -24,11 +24,11 @@ exports[`CLI Integration Tests > extracts translation keys to a .json file with 
 "{
 	"translate-service": {
 		"comp": {
-			"welcome": "",
 			"description": "",
 			"details": "",
 			"show-more-label": "",
-			"show-less-label": ""
+			"show-less-label": "",
+			"welcome": ""
 		}
 	},
 	"pipe": {
@@ -74,10 +74,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\\n"
 
 #: ngx-translate-extract/tests/cli/fixtures/translate-service.component.fixture.ts
-msgid "translate-service.comp.welcome"
-msgstr ""
-
-#: ngx-translate-extract/tests/cli/fixtures/translate-service.component.fixture.ts
 msgid "translate-service.comp.description"
 msgstr ""
 
@@ -91,6 +87,10 @@ msgstr ""
 
 #: ngx-translate-extract/tests/cli/fixtures/translate-service.component.fixture.ts
 msgid "translate-service.comp.show-less-label"
+msgstr ""
+
+#: ngx-translate-extract/tests/cli/fixtures/translate-service.component.fixture.ts
+msgid "translate-service.comp.welcome"
 msgstr ""
 
 #: ngx-translate-extract/tests/cli/fixtures/translate-pipe.component.fixture.ts
@@ -142,9 +142,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"
 
-msgid "translate-service.comp.welcome"
-msgstr ""
-
 msgid "translate-service.comp.description"
 msgstr ""
 
@@ -155,6 +152,9 @@ msgid "translate-service.comp.show-more-label"
 msgstr ""
 
 msgid "translate-service.comp.show-less-label"
+msgstr ""
+
+msgid "translate-service.comp.welcome"
 msgstr ""
 
 msgid "pipe.comp.welcome"

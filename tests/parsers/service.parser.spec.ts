@@ -168,6 +168,24 @@ describe('ServiceParser', () => {
 		expect(key).to.deep.equal(['Hello', 'World']);
 	});
 
+	it("should extract array of strings in TranslateService's translate() method", () => {
+		const contents = `
+			@Component({ })
+			export class AppComponent {
+			    private readonly _translateService = inject(TranslateService)
+
+				constructor(protected ) {
+					this._translateService.translate('hello.from.constructor');
+				}
+				test() {
+					this._translateService.translate(['Hello', 'World']);
+				}
+			}
+		`;
+		const key = parser.extract(contents, componentFilename)?.keys();
+		expect(key).to.deep.equal(['hello.from.constructor', 'Hello', 'World']);
+	});
+
 	it('should extract string arrays encapsulated in backticks', () => {
 		const contents = `
 			@Component({ })
@@ -182,7 +200,7 @@ describe('ServiceParser', () => {
 		expect(keys).to.deep.equal(['Hello', 'World']);
 	});
 
-	it('should NOT extract empty strings from the get()/instant()/stream() methods', () => {
+	it('should NOT extract empty strings from the get()/instant()/stream()/translate() methods', () => {
 		const contents = `
 			@Component({ })
 			export class AppComponent {
@@ -191,16 +209,19 @@ describe('ServiceParser', () => {
 					this._translateService.get('');
 					this._translateService.instant('');
 					this._translateService.stream('');
+					this._translateService.translate('');
 					this._translateService.get(['', '']);
 					this._translateService.instant(['', '']);
 					this._translateService.stream(['', '']);
+					this._translateService.translate(['', '']);
 				}
+			}
 		`;
 		const keys = parser.extract(contents, componentFilename)?.keys();
 		expect(keys).to.deep.equal([]);
 	});
 
-	it('should not extract strings in get()/instant()/stream() methods of other services', () => {
+	it('should not extract strings in get()/instant()/stream()/translate() methods of other services', () => {
 		const contents = `
 			@Component({ })
 			export class AppComponent {
@@ -212,7 +233,9 @@ describe('ServiceParser', () => {
 					this._otherService.get('Hello World');
 					this._otherService.instant('Hi there');
 					this._otherService.stream('Hi there');
+					this._otherService.translate('Hi there');
 				}
+			}
 		`;
 		const keys = parser.extract(contents, componentFilename)?.keys();
 		expect(keys).to.deep.equal([]);
@@ -866,9 +889,18 @@ describe('ServiceParser', () => {
 				export const getTitle = (): string => {
 					return inject(TranslateService).instant('translation.key');
 				}
+				export const getSubtitle = (): string => {
+					return inject(TranslateService).get('translation.get.key');
+				}
+				export const getDescription = (): string => {
+					return inject(TranslateService).stream('translation.stream.key');
+				}
+				export const getLabel = (): string => {
+					return inject(TranslateService).translate('translation.translate.key');
+				}
 			`;
 			const keys = parser.extract(contents, componentFilename)?.keys();
-			expect(keys).to.deep.equal(['translation.key']);
+			expect(keys).to.deep.equal(['translation.key', 'translation.get.key', 'translation.stream.key', 'translation.translate.key']);
 		});
 
 		it('should ignore injected services that are not TranslateService type', () => {
