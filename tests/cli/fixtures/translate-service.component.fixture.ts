@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, inject, signal } from '@angular/core';
+import { translate, TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-home',
@@ -21,11 +21,11 @@ import { TranslateService } from '@ngx-translate/core';
 export class TranslateServiceComponentFixture {
 	private readonly translate = inject(TranslateService);
 
-	readonly welcomeMessage = this.translate.instant('translate-service.comp.welcome');
+	readonly welcomeMessage = translate('translate-service.comp.welcome');
 	readonly descriptionMessage = this.translate.instant('translate-service.comp.description');
-	readonly detailsMessage = this.translate.instant('translate-service.comp.details');
-	readonly showMoreLabel = this.translate.instant('translate-service.comp.show-more-label');
-	readonly showLessLabel = this.translate.instant('translate-service.comp.show-less-label');
+	readonly detailsMessage = this.translate.get('translate-service.comp.details');
+	readonly showMoreLabel = this.translate.stream('translate-service.comp.show-more-label');
+	readonly showLessLabel = this.translate.translate('translate-service.comp.show-less-label');
 
 	readonly showMore = signal(false);
 }

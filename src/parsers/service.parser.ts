@@ -23,7 +23,7 @@ import { TranslationCollection } from '../utils/translation.collection.js';
 import { ParserInterface } from './parser.interface.js';
 
 const TRANSLATE_SERVICE_TYPE_REFERENCE = 'TranslateService';
-const TRANSLATE_SERVICE_METHOD_NAMES = ['get', 'instant', 'stream'];
+const TRANSLATE_SERVICE_METHOD_NAMES = ['get', 'instant', 'stream', 'translate'];
 
 export class ServiceParser implements ParserInterface {
 	private static propertyMap = new Map<string, string[]>();
