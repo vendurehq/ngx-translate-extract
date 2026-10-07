@@ -1,5 +1,19 @@
 # Changelog
 
+## v10.3.0 (2026-10-07)
+
+- Add support for `@boundary` and `@error` blocks ([#169](https://github.com/vendurehq/ngx-translate-extract/pull/169))
+- Log skipped files with no applicable parser ([#165](https://github.com/vendurehq/ngx-translate-extract/pull/165))
+- Deduplicate overlapping input globs and resolve extraction file count ([#163](https://github.com/vendurehq/ngx-translate-extract/pull/163))
+- Skip files and parsers that cannot match before parsing (thanks @palexcast) ([#161](https://github.com/vendurehq/ngx-translate-extract/pull/161))
+- Optimize path normalization throughput and remove redundant syscalls ([#166](https://github.com/vendurehq/ngx-translate-extract/pull/166))
+- Optimize parsing and extraction speed across all parsers ([#156](https://github.com/vendurehq/ngx-translate-extract/pull/156), [#159](https://github.com/vendurehq/ngx-translate-extract/pull/159))
+- Fix service parser dropping concatenated string keys containing spaces or empty strings (e.g. `'PREFIX' + ' ' + 'KEY'`) ([#159](https://github.com/vendurehq/ngx-translate-extract/pull/159))
+- Fix service parser incorrectly treating generic wrappers (e.g. `Signal<TranslateService>`) or array types (`TranslateService[]`) as direct service instances ([#159](https://github.com/vendurehq/ngx-translate-extract/pull/159))
+- Fix component parser attempting to extract keys from unrelated template properties in nested objects or provider configurations (e.g. `providers: [{useValue: {template: '...'}}]`) ([#159](https://github.com/vendurehq/ngx-translate-extract/pull/159))
+- Fix inheritance traversal incorrectly treating `implements` interface clauses as extended base classes ([#159](https://github.com/vendurehq/ngx-translate-extract/pull/159))
+- Resolve local inheritance and optimize TypeScript module resolution in service parser ([#157](https://github.com/vendurehq/ngx-translate-extract/pull/157))
+
 ## v10.2.0 (2026-06-10)
 
 - Add support for the new `translate` function and method from `ngx-translate` 18 ([#143](https://github.com/vendurehq/ngx-translate-extract/pull/143))
