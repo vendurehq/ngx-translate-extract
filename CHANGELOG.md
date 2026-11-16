@@ -1,5 +1,9 @@
 # Changelog
 
+## v10.3.2 (2026-11-16)
+
+- Limit TypeScript peer dependency upper bound to <7.0.0 ([#177](https://github.com/vendurehq/ngx-translate-extract/issues/177))
+
 ## v10.3.1 (2026-10-15)
 
 - Fix service parser dropping keys in subclasses inheriting `TranslateService` ([#173](https://github.com/vendurehq/ngx-translate-extract/issues/173))
